@@ -1,0 +1,48 @@
+function GetBackupJobState {
+    $backupJob = Get-WBJob -Previous 1
+    
+    if ($backupJob.JobItems.Count -eq 0) {
+        return "NotStarted"
+    } elseif ($backupJob.CurrentOperation -eq "") {
+        return "Completed"
+    } else {
+        return "Failed"
+    }
+}
+
+function sendMail{
+
+    Write-Host "Sending Email"
+
+    #SMTP server name
+    $smtpServer = "192.168.200.10"
+
+    #Creating a Mail object
+    $msg = new-object Net.Mail.MailMessage
+
+    #Creating SMTP server object
+    $smtp = new-object Net.Mail.SmtpClient($smtpServer)
+    
+    $jobState = GetBackupJobState
+    #Mail subject 
+    $subject = $env:computername+": Windows Backup "+(Get-Date) + " - JobState: " + $jobState
+
+    
+    #Mail content 
+    $body = Get-WBJob -Previous 1 | ConvertTo-Html -As List | Out-String
+
+    #Email structure
+    $msg.From = "support@fank-it.ch"
+    $msg.ReplyTo = "support@fank-it.ch"
+    $msg.To.Add("ariana.idrizaj@fank-it.ch")
+    $msg.subject = $subject
+    $msg.body = $body
+    $msg.IsBodyHtml = $true
+
+    #Sending email
+    $smtp.Send($msg)
+
+}
+
+#Calling function
+sendMail
