@@ -9,6 +9,7 @@ This PowerShell script generates reports on the status of Windows backups and se
 
 1. **Requirements:**
 
+   - SMTP Server
    - PowerShell
    - Windows Server Backup module
    - Task Scheduler
