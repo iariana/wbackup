@@ -15,7 +15,7 @@ function sendMail{
     Write-Host "Sending Email"
 
     #SMTP server name
-    $smtpServer = "192.168.200.10"
+    $smtpServer = "1.1.1.1"
 
     #Creating a Mail object
     $msg = new-object Net.Mail.MailMessage
@@ -32,9 +32,9 @@ function sendMail{
     $body = Get-WBJob -Previous 1 | ConvertTo-Html -As List | Out-String
 
     #Email structure
-    $msg.From = "support@fank-it.ch"
-    $msg.ReplyTo = "support@fank-it.ch"
-    $msg.To.Add("ariana.idrizaj@fank-it.ch")
+    $msg.From = "your@mail.com"
+    $msg.ReplyTo = "your@mail.com"
+    $msg.To.Add("your@mail.com")
     $msg.subject = $subject
     $msg.body = $body
     $msg.IsBodyHtml = $true
